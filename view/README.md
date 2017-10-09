@@ -1,2 +1,1 @@
-you draw i guess
-a simple game
+view part
