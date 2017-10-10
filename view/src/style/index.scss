@@ -1,0 +1,37 @@
+.wrap{
+	height: 100vh;
+	position: relative;
+	background-color: rgba(#DACEB6, .8);
+	canvas{
+		box-shadow:  0 0 2px 5px rgba(#000, .3) inset;
+		background-color: #fff;
+	}
+	.view{
+		float: left;
+		line-height: 28px;
+		position: relative;
+		.user{
+			position: absolute;
+			height: 20%;
+			width: 100%;
+			box-shadow:  0 0 2px 2px rgba(#000, .3) inset;
+		}
+		.msgs{
+			position: absolute;
+			top: 20%;
+			width: 100%;
+			height: 80%;
+			background-color: #fff;
+			overflow-y: scroll;
+			word-wrap:break-word;
+			box-sizing: border-box;
+			padding: 10px;
+		}
+	}
+	form{
+		float: right;
+	}
+	textarea{
+		resize: none;
+	}
+}

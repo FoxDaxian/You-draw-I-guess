@@ -28,11 +28,19 @@
     <meta name='full-screen' content='yes'>
 	<!-- 控制手机端写死分辨率的 -->
 	<meta name='viewport' content='width=1024,user-scalable=no'/>
-
 	<title>你画我猜</title>
 </head>
 <body>
-	
+	<div class="wrap">
+		<canvas></canvas>
+		<div class="view">
+			<div class="user">当前在线人数为：2</div>
+			<div class="msgs"></div>
+		</div>
+		<form>
+			<input type="text" placeholder="随便写点什么吧">
+		</form>
+	</div>
 	<script src='dist/bundle.js'></script>
 </body>
 </html>
