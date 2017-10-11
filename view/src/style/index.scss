@@ -12,9 +12,11 @@
 		position: relative;
 		.user{
 			position: absolute;
-			height: 20%;
+			line-height: 220%;
 			width: 100%;
 			box-shadow:  0 0 2px 2px rgba(#000, .3) inset;
+			padding-left: 20px;
+			box-sizing: border-box;
 		}
 		.msgs{
 			position: absolute;
