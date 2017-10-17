@@ -7,7 +7,6 @@ const users = {}
 let curUser = 0
 
 io.on('connection', (socket) => {
-	console.log(socket.id)
 	// 小组名称 | ID
 	const clientUrlID = socket.request.headers.referer
 
@@ -25,13 +24,22 @@ io.on('connection', (socket) => {
 		users[socket.id] && delete users[socket.id]
 		curUser -= 1
 		socket.leave(clientUrlID)
-		io.to(clientUrlID).emit('someoneLeave', username, clientUrlID, curUser)
+		socket.broadcast.emit('someoneLeave', username, clientUrlID, curUser)
 	})
 
 
 	// 发送
 	socket.on('message', (msg, un) => {
-		io.to(clientUrlID).emit('showMsg', msg, un)
+		socket.broadcast.emit('showMsg', msg, un)
+	})
+
+	// canvas
+	socket.on('click', (data) => {
+		socket.broadcast.emit('updateClick', data)
+	})
+
+	socket.on('move', (data) => {
+		socket.broadcast.emit('updateMove', data)
 	})
 
 })

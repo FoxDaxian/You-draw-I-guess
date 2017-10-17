@@ -22,8 +22,21 @@ window.addEventListener('load', (e) => {
 	const msgs = view.querySelector('.msgs')
 	const user = view.querySelector('.user span')
 
+	const submitComments = (msg, username) => {
+		const msgEl = document.createElement('p')
+		msgEl.innerHTML = `${ username }说: ${ msg }`
+		msgs.appendChild(msgEl)
+	}
+
 	new Style(canvas, form, view)
-	new Canvas(canvas, socket)
+	const instance = new Canvas(canvas, socket)
+
+	socket.on('updateClick', (data) => {
+		instance.socketClick(data)
+	})
+	socket.on('updateMove', (data) => {
+		instance.socketMove(data)
+	})
 
 	// 连接
 	socket.on('connect', () => {
@@ -42,16 +55,13 @@ window.addEventListener('load', (e) => {
 	})
 
 	// 显示聊天内容
-	socket.on('showMsg', (msg, username) => {
-		const msgEl = document.createElement('p')
-		msgEl.innerHTML = `${ username }说: ${ msg }`
-		msgs.appendChild(msgEl)
-	})
+	socket.on('showMsg', submitComments)
 
 	// 发送
 	form.onsubmit = (e) => {
 		const ev = e || window.event
 		ev.preventDefault()
+		submitComments(input.value, username)
 		socket.send(input.value, username)
 		input.value = ''
 	}
