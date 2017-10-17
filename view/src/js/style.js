@@ -1,19 +1,24 @@
 class Style {
-    constructor (canvas, form, view) {
+    constructor (canvas, view, curplayer) {
+        console.log(curplayer)
         this.sizeObj = this.getSize()
 
-        canvas.setAttribute('width', this.sizeObj.width * 0.98)
+        // canvas部分
+        canvas.setAttribute('width', this.sizeObj.width * 0.6)
         canvas.setAttribute('height', this.sizeObj.height * 0.7)
         canvas.style.marginLeft = this.sizeObj.width * 0.01 + 'px'
         canvas.style.marginTop = this.sizeObj.height * 0.02 + 'px'
 
-        form.style.marginRight = this.sizeObj.width * 0.01 + 'px'
-        form.style.marginTop = this.sizeObj.height * 0.03 + 'px'
+        // 展示信息部分
+        view.style.width = this.sizeObj.width * 0.3 + 'px'
+        view.style.height = this.sizeObj.height * 0.7 + 'px'
+        view.style.marginTop = this.sizeObj.height * 0.02 + 'px'
+        view.style.marginRight = this.sizeObj.width * 0.02 + 'px'
 
-        view.style.width = this.sizeObj.width * 0.8 + 'px'
-        view.style.height = this.sizeObj.height * 0.22 + 'px'
-        view.style.marginTop = this.sizeObj.height * 0.03 + 'px'
-        view.style.marginLeft = this.sizeObj.width * 0.01 + 'px'
+        // 当前用户部分
+        curplayer.style.width = this.sizeObj.width + 'px'
+        curplayer.style.height = this.sizeObj.height * 0.2 + 'px'
+        curplayer.style.marginTop = this.sizeObj.height * 0.06 + 'px'
     }
 
     getSize () {

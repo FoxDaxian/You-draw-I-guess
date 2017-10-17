@@ -21,6 +21,7 @@ window.addEventListener('load', (e) => {
 	const view = document.querySelector('.view')
 	const msgs = view.querySelector('.msgs')
 	const user = view.querySelector('.user span')
+	const curplayer = document.querySelector('.curplayer')
 
 	const submitComments = (msg, username) => {
 		const msgEl = document.createElement('p')
@@ -28,7 +29,27 @@ window.addEventListener('load', (e) => {
 		msgs.appendChild(msgEl)
 	}
 
-	new Style(canvas, form, view)
+	const userTips = (person, operate, room) => {
+		const msgEl = document.createElement('p')
+		msgEl.innerHTML = `${ person } ${ operate } ${ room }`
+		msgs.appendChild(msgEl)
+	}
+
+	const renderUser = (person, index) => {
+		const html = `
+		<div class="player">
+			<p class="title">玩家${ index }</p>
+			<p class="state">未准备</p>
+			<p class="nick">${ person }</p>
+		</div>
+		`
+		const temp = document.createElement('div')
+		temp.innerHTML = html
+		curplayer.appendChild(temp.children[0])
+	}
+
+
+	new Style(canvas, view, curplayer)
 	const instance = new Canvas(canvas, socket)
 
 	socket.on('updateClick', (data) => {
@@ -43,15 +64,21 @@ window.addEventListener('load', (e) => {
 		socket.emit('join', username)
 	})
 
+	// 用户加入
 	socket.on('someoneJoin', (person, room, curUser) => {
+		curplayer.innerHTML = ''
 		user.innerHTML = curUser
-		console.log(`${ person } 加入了${ room }`)
+
+		for (let i = 0; i < curUser; i++) {
+			renderUser(person, i + 1)
+		}
+		userTips(person, '加入了', room)
 	})
 
-	// 断开
+	// 用户离开
 	socket.on('someoneLeave', (person, room, curUser) => {
 		user.innerHTML = curUser
-		console.log(`${ person } 离开了${ room }`)
+		userTips(person, '离开了', room)
 	})
 
 	// 显示聊天内容

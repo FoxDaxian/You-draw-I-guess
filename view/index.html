@@ -32,14 +32,18 @@
 </head>
 <body>
 	<div class="wrap">
-		<canvas></canvas>
-		<div class="view">
-			<div class="user">当前在线人数为：<span>0</span></div>
-			<div class="msgs"></div>
+		<div class="main">
+			<canvas></canvas>
+			<div class="view">
+				<div class="user">当前在线人数为：<span>0</span></div>
+				<div class="msgs"></div>
+				<form>
+					<input type="text" placeholder="随便写点什么吧">
+				</form>
+			</div>
 		</div>
-		<form>
-			<input type="text" placeholder="随便写点什么吧">
-		</form>
+		<div class="curplayer">
+		</div>
 	</div>
 	<script src='dist/bundle.js'></script>
 </body>
