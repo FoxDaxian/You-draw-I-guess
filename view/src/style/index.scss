@@ -71,4 +71,22 @@
 			}
 		}
 	}
+	.start{
+		position: absolute;
+		right: 0;
+		bottom: 0;
+		font-size: 30px;
+		display: none;
+	}
+	.question{
+		display: none;
+		position: absolute;
+		top: 20%;
+		bottom: 20%;
+		left: 20%;
+		right: 20%;
+		margin: auto;
+		background-color: rgba(#000, .5);
+		color: #fff;
+	}
 }

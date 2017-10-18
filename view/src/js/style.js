@@ -1,6 +1,5 @@
 class Style {
     constructor (canvas, view, curplayer) {
-        console.log(curplayer)
         this.sizeObj = this.getSize()
 
         // canvas部分
