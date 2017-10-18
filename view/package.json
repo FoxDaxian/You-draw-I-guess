@@ -8,7 +8,8 @@
     "build": "cross-env NODE_ENV=production rollup -c build/rollup.config.js"
   },
   "dependencies": {
-    "babel-polyfill": "^6.26.0"
+    "babel-polyfill": "^6.26.0",
+    "mininotice": "^1.0.8"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.4",

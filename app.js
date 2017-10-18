@@ -69,8 +69,8 @@ io.on('connection', (socket) => {
 	socket.on('message', (msg, un) => {
 		if (tempQuestion.topic === msg) {
 			io.to(clientUrlID).emit('anwser', un)
+			roundContinue()
 		}
-		console.log(tempQuestion)
 		socket.broadcast.emit('showMsg', msg, un)
 	})
 
@@ -102,22 +102,24 @@ io.on('connection', (socket) => {
 			io.to(clientUrlID).emit('start', curDraw, tempQuestion = randQuestion())
 			curDraw++
 
-			timer = setInterval(() => {
-				if (curDraw === rounds) {
-					timer !== null && clearInterval(timer)
-					curDraw = 0
-					io.to(clientUrlID).emit('gameEnd')
-					return
-				}
-
-				io.to(clientUrlID).emit('changeDrawer', curDraw % users.length, tempQuestion = randQuestion())
-				curDraw++
-
-			}, roundTime)
+			timer = setInterval(roundContinue, roundTime)
 		} else {
 			socket.emit('notPrepared')
 		}
 	})
+
+	const roundContinue = () => {
+		if (curDraw === rounds) {
+			timer !== null && clearInterval(timer)
+			curDraw = 0
+			io.to(clientUrlID).emit('gameEnd')
+			return
+		}
+
+		io.to(clientUrlID).emit('changeDrawer', curDraw % users.length, tempQuestion = randQuestion())
+		curDraw++
+
+	}
 })
 
 http.listen(3000, () => {

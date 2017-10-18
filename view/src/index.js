@@ -1,4 +1,7 @@
 console.log('rollup压缩html') // TODO
+import mininotice from 'mininotice'
+import 'mininotice/lib/notice.css'
+
 import './style/reset.css'
 import './style/index.scss'
 
@@ -165,7 +168,7 @@ window.addEventListener('load', (e) => {
 	})
 
 	socket.on('start', (curDraw, question) => {
-		console.log('游戏开始')
+		mininotice.msg('游戏开始')
 		instance.clearCanvas()
 		if (userInfo.index === curDraw) {
 			instance.canDraw = false
@@ -175,7 +178,7 @@ window.addEventListener('load', (e) => {
 	})
 
 	socket.on('gameEnd', () => {
-		console.log('游戏结束')
+		mininotice.msg('游戏结束')
 		instance.clearCanvas()
 		instance.canDraw = true
 		instance.canStart = false
@@ -199,6 +202,6 @@ window.addEventListener('load', (e) => {
 	// 回答正确
 	socket.on('anwser', (un) => {
 		// 进入下一次轮询
-		console.log(`${ un }回答正确`)
+		mininotice.msg(`${ un }回答正确`)
 	})
 })
