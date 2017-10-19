@@ -4,15 +4,20 @@ const http = require('http').Server(app)
 const io = require('socket.io')(http)
 
 const question = require('./question.js')
+const config = require('./config.js')
+
+// package.json中的script设置NODE_ENV=development，可是分辨当前运行环境，通过process.env.NODE_ENV获取
+let conf = process.env.NODE_ENV === 'development' ? config.dev : config.prod
 
 const forOut = {}
 const users = []
 
-const roundTime = 60000
+const roundTime = conf.roundTime
 let timer = null
 let rounds = 0 // 总轮数 => 用户总数 * n
 let curDraw = 0 // 当前作画的人
 let tempQuestion = ''
+let isPlaying = false
 
 const randQuestion = () => {
 	const len = question.length
@@ -27,9 +32,10 @@ io.on('connection', (socket) => {
 		const temp = {
 			id: socket.id,
 			name: name,
-			state: false,
+			state: !Object.keys(users).length,
 			own: !Object.keys(users).length,
-			index: users.length
+			index: users.length,
+			score: 0
 		}
 		forOut[socket.id] = temp
 		users.push(temp)
@@ -64,14 +70,22 @@ io.on('connection', (socket) => {
 		socket.broadcast.emit('someoneLeave', activeUser.name, users, clientUrlID)
 	})
 
-
 	// 发送
-	socket.on('message', (msg, un) => {
-		if (tempQuestion.topic === msg) {
-			io.to(clientUrlID).emit('anwser', un)
+	socket.on('message', (msg, userInfo) => {
+		if (isPlaying && tempQuestion.topic === msg) {
+			users.some((el) => {
+				if (el.id === userInfo.id) {
+					el.score += 1
+					return true
+				}
+			})
+			io.to(clientUrlID).emit('anwser', userInfo, msg)
+			tempQuestion = ''
+			timer !== null && clearInterval(timer)
+			timer = setInterval(roundContinue, roundTime)
 			roundContinue()
 		}
-		socket.broadcast.emit('showMsg', msg, un)
+		socket.broadcast.emit('showMsg', msg, userInfo.name)
 	})
 
 	// canvas
@@ -85,21 +99,24 @@ io.on('connection', (socket) => {
 
 	// 切换用户准备状态
 	socket.on('toggleState', (index) => {
+		if (isPlaying || !+index) {
+			return
+		}
 		users[index].state = !users[index].state
 		io.to(clientUrlID).emit('changeState', users)
 	})
 
 	// 开始游戏
 	socket.on('startGame', () => {
-		console.log()
 		const canStart = users.every((el) => {
 			return el.state
 		})
 		// 如果能开始游戏，则轮询当前用户们，依次画画
 		if (canStart) {
+			isPlaying = !isPlaying
 			rounds = users.length
 
-			io.to(clientUrlID).emit('start', curDraw, tempQuestion = randQuestion())
+			io.to(clientUrlID).emit('start', curDraw, tempQuestion = randQuestion(), users[curDraw].name)
 			curDraw++
 
 			timer = setInterval(roundContinue, roundTime)
@@ -110,13 +127,23 @@ io.on('connection', (socket) => {
 
 	const roundContinue = () => {
 		if (curDraw === rounds) {
+			users.forEach((el, index) => {
+				!index && (el.state = true)
+				index && (el.state = false)
+			})
+			io.to(clientUrlID).emit('gameEnd', users)
+
+			users.forEach((el, index) => {
+				el.score = 0
+			})
+
 			timer !== null && clearInterval(timer)
 			curDraw = 0
-			io.to(clientUrlID).emit('gameEnd')
+			isPlaying = !isPlaying
 			return
 		}
 
-		io.to(clientUrlID).emit('changeDrawer', curDraw % users.length, tempQuestion = randQuestion())
+		io.to(clientUrlID).emit('changeDrawer', curDraw % users.length, tempQuestion = randQuestion(), users[curDraw % users.length].name)
 		curDraw++
 
 	}

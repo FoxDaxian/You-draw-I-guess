@@ -1,7 +1,13 @@
 const dev = {
+	roundTime: 3000,
 	ip: 'http://localhost:3000/'
+	// ip: 'http://10.128.2.14:3000/'
 }
 
-export default {
-	dev
+const prod = {
+
+}
+
+module.exports = {
+	dev, prod
 }

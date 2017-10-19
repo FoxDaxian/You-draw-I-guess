@@ -1,5 +1,5 @@
 class Style {
-    constructor (canvas, view, curplayer) {
+    constructor (canvas, view, curplayer, drawing, gameTips) {
         this.sizeObj = this.getSize()
 
         // canvas部分
@@ -16,8 +16,17 @@ class Style {
 
         // 当前用户部分
         curplayer.style.width = this.sizeObj.width + 'px'
-        curplayer.style.height = this.sizeObj.height * 0.2 + 'px'
-        curplayer.style.marginTop = this.sizeObj.height * 0.06 + 'px'
+        curplayer.style.marginTop = this.sizeObj.height * 0.02 + 'px'
+
+        // 当前正在画的玩家
+        drawing.style.width = this.sizeObj.width + 'px'
+        drawing.style.marginTop = this.sizeObj.height * 0.02 + 'px'
+        
+        // 游戏提示框
+        gameTips.style.width = this.sizeObj.width + 'px'
+        gameTips.style.marginTop = this.sizeObj.height * 0.02 + 'px'
+        
+
     }
 
     getSize () {

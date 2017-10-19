@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
-    "mininotice": "^1.0.8"
+    "mininotice": "^1.0.9"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.4",
