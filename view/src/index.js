@@ -1,5 +1,5 @@
 console.log('rollup压缩html') // TODO
-// TODO 聊天框自动滚动，代码优化， 发布
+// TODO 聊天框自动滚动，代码优化， 发布 当前画画得人不能公布答案
 import mininotice from 'mininotice'
 import 'mininotice/lib/notice.css'
 
