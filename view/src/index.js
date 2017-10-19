@@ -1,5 +1,5 @@
 console.log('rollup压缩html') // TODO
-// TODO 聊天框自动滚动，代码优化， 发布 当前画画得人不能公布答案
+// TODO 代码优化， 发布  2048谢萍版
 import mininotice from 'mininotice'
 import 'mininotice/lib/notice.css'
 
@@ -31,6 +31,9 @@ window.addEventListener('load', (e) => {
 	const question = document.querySelector('.question')
 	const drawing = document.querySelector('.drawing')
 	const gameTips = document.querySelector('.gameTips')
+
+	// 聊天框
+	let initScroll = msgs.scrollHeight - msgs.offsetHeight
 
 	const judgeWinner = (arr) => {
 		const res = []
@@ -66,17 +69,26 @@ window.addEventListener('load', (e) => {
 		}, 3000)
 	}
 
+	const scrollFn = () => {
+		const curScroll = msgs.scrollHeight - msgs.offsetHeight
+		if (initScroll !== curScroll) {
+			initScroll = msgs.scrollTop = curScroll
+		}
+	}
+
 	const myComments = (msg) => {
 		const msgEl = document.createElement('p')
 		msgEl.style.textAlign = 'right'
 		msgEl.innerHTML = `你说: ${ msg }`
 		msgs.appendChild(msgEl)
+		scrollFn()
 	}
 
 	const submitComments = (msg, username) => {
 		const msgEl = document.createElement('p')
 		msgEl.innerHTML = `${ username }说: ${ msg }`
 		msgs.appendChild(msgEl)
+		scrollFn()
 	}
 
 	const announceWinner = (winners) => {
@@ -84,12 +96,14 @@ window.addEventListener('load', (e) => {
 		msgEl.classList.add('winners')
 		msgEl.innerHTML = winners
 		msgs.appendChild(msgEl)
+		scrollFn()
 	}
 
 	const userTips = (person, operate, room) => {
 		const msgEl = document.createElement('p')
 		msgEl.innerHTML = `${ person } ${ operate } ${ room }<br />`
 		msgs.appendChild(msgEl)
+		scrollFn()
 	}
 
 	const renderUser = (person, info) => {
@@ -174,8 +188,12 @@ window.addEventListener('load', (e) => {
 	form.onsubmit = (e) => {
 		const ev = e || window.event
 		ev.preventDefault()
+		if (!input.value) {
+			mininotice.msg('评论不能为空', 'danger')
+			return
+		}
 		myComments(input.value)
-		socket.send(input.value, userInfo)
+		socket.send(input.value, userInfo, instance.canStart === true && instance.canDraw === false)
 		input.value = ''
 	}
 

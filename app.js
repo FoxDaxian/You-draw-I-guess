@@ -71,8 +71,8 @@ io.on('connection', (socket) => {
 	})
 
 	// 发送
-	socket.on('message', (msg, userInfo) => {
-		if (isPlaying && tempQuestion.topic === msg) {
+	socket.on('message', (msg, userInfo, canAnwser) => {
+		if (isPlaying && tempQuestion.topic === msg && !canAnwser) {
 			users.some((el) => {
 				if (el.id === userInfo.id) {
 					el.score += 1

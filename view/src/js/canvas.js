@@ -63,7 +63,7 @@ class Canvas {
 		this.ctx.beginPath()
 	}
 
-	// 这里同步操作
+	// socket
 	socketClick ({x, y, w, h}) {
 		this.ctx.beginPath()
 		this.ctx.moveTo(x / w * this.w, y / h * this.h)
