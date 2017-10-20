@@ -70,8 +70,9 @@ io.on('connection', (socket) => {
 		socket.broadcast.emit('someoneLeave', activeUser.name, users, clientUrlID)
 	})
 
-	// 发送
+	// 发送 并 判断答案
 	socket.on('message', (msg, userInfo, canAnwser) => {
+		socket.broadcast.emit('showMsg', msg, userInfo.name)
 		if (isPlaying && tempQuestion.topic === msg && !canAnwser) {
 			users.some((el) => {
 				if (el.id === userInfo.id) {
@@ -85,7 +86,6 @@ io.on('connection', (socket) => {
 			timer = setInterval(roundContinue, roundTime)
 			roundContinue()
 		}
-		socket.broadcast.emit('showMsg', msg, userInfo.name)
 	})
 
 	// canvas
@@ -114,7 +114,7 @@ io.on('connection', (socket) => {
 		// 如果能开始游戏，则轮询当前用户们，依次画画
 		if (canStart) {
 			isPlaying = !isPlaying
-			rounds = users.length
+			rounds = users.length * conf.round
 
 			io.to(clientUrlID).emit('start', curDraw, tempQuestion = randQuestion(), users[curDraw].name)
 			curDraw++

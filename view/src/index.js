@@ -1,4 +1,3 @@
-console.log('rollup压缩html') // TODO
 // TODO 代码优化， 发布  2048谢萍版
 import mininotice from 'mininotice'
 import 'mininotice/lib/notice.css'
@@ -18,7 +17,10 @@ conf = ENV === 'development' ? Config.dev : Config.prod
 
 window.addEventListener('load', (e) => {
 	let userInfo
-	const username = 'fox'
+	let username = prompt('输入您的昵称')
+	while (username === null || username.trim() === '') {
+		username = prompt('输入您的昵称')
+	}
 	const socket = io(conf.ip)
 	const canvas = document.querySelector('canvas')
 	const input = document.querySelector('input')
@@ -227,6 +229,7 @@ window.addEventListener('load', (e) => {
 		instance.clearCanvas()
 		if (userInfo.index === curDraw) {
 			showCurDrawer('你')
+			announceWinner(`画: ${ question.topic }`)
 			instance.canDraw = false
 			showQuestion(question)
 		} else {
@@ -252,9 +255,9 @@ window.addEventListener('load', (e) => {
 		winner.forEach((el, index) => {
 			if (index === winner.length - 1) {
 				if (index > 0) {
-					winners += '、' + el.name
+					winners += '、' + el.name === username ? '你' : el.name
 				} else {
-					winners += el.name
+					winners += el.name === username ? '你' : el.name
 				}
 				if (el.score === 0) {
 					winners = '平局'
@@ -262,7 +265,7 @@ window.addEventListener('load', (e) => {
 					winners += '获胜'
 				}
 			} else {
-				winners += el.name
+				winners += el.name === username ? '你' : el.name
 			}
 		})
 		announceWinner(winners)
@@ -282,6 +285,7 @@ window.addEventListener('load', (e) => {
 		if (userInfo.index === curDraw) {
 			instance.canDraw = false
 			showCurDrawer('你')
+			announceWinner(`画: ${ question.topic }`)
 			showQuestion(question)
 			!gameTips.classList.contains('toggleTips') && gameTips.classList.toggle('toggleTips')
 		} else {

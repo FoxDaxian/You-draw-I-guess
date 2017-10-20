@@ -4,7 +4,10 @@
   "description": "no desc",
   "main": "app.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development DEBUG=socket.io* nodemon app.js"
+    "dev": "cross-env NODE_ENV=development DEBUG=socket.io* nodemon app.js",
+    "pm2": "cross-env NODE_ENV=pruduction DEBUG=socket.io* pm2 start app.js",
+    "reload": "pm2 reload all",
+    "stop": "pm2 stop all"
   },
   "repository": {
     "type": "git",
@@ -22,11 +25,11 @@
   "devDependencies": {
     "cross-env": "^5.0.5",
     "debug": "^3.1.0",
-    "nodemon": "^1.12.1",
-    "rollup-plugin-replace": "^2.0.0"
+    "nodemon": "^1.12.1"
   },
   "dependencies": {
     "express": "^4.16.1",
+    "pm2": "^2.7.2",
     "socket.io": "^2.0.3"
   }
 }
