@@ -6,7 +6,7 @@ const dev = {
 
 const prod = {
 	roundTime: 1000 * 60 * 3,
-	ip: 'http://139.199.207.170:8080/',
+	ip: 'http://139.199.207.170:3000/',
 	round: 3
 }
 
