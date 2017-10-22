@@ -10,6 +10,7 @@ const babel = require('rollup-plugin-babel')
 const replace = require('rollup-plugin-replace')
 // 压缩js
 const uglify = require('rollup-plugin-uglify')
+const { minify } = require('uglify-es')
 
 // css 还差如何把css插入html？？？
 const sass = require('node-sass')
@@ -80,10 +81,10 @@ const rollup = {
             exclude: 'node_modules/**',
             ENV: JSON.stringify(mode)
         }),
-        (process.env.NODE_ENV === 'production' && uglify()),
         (process.env.NODE_ENV === 'production' && progress({
             clearLine: false
-        }))
+        })),
+        (process.env.NODE_ENV === 'production' && uglify({}, minify))
     ],
     sourcemap: true
 }
